@@ -1,10 +1,16 @@
-# github-core-clone-01 starter
+[![make.fun · github-core-clone-01](https://make.fun/badge/github-core-clone-01.svg)](https://make.fun/bounty/github-core-clone-01?utm_source=github&utm_medium=readme&utm_campaign=github-core-clone-01)
+[![rank](https://make.fun/badge/github-core-clone-01/luckyind2020/github-core-clone-01/rank.svg)](https://make.fun/bounty/github-core-clone-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=github-core-clone-01)
+[![reward](https://make.fun/badge/github-core-clone-01/luckyind2020/github-core-clone-01/reward.svg)](https://make.fun/bounty/github-core-clone-01?utm_source=github&utm_medium=readme&utm_campaign=github-core-clone-01)
 
-A runnable starting point for [the contest](https://make.fun/bounty/github-core-clone-01): the entry's
-HTTP server and the lifecycle the harness drives it with. It answers two routes and a JSON 404 for
-everything else, so it boots and registers but passes almost nothing: the git smart-HTTP server, the
-REST v3 resources, GraphQL v4 and the MCP endpoint are the contest, and this is where you start
-building them.
+# Ember Forge — a GitHub-compatible git forge
+
+My entry for [github-core-clone-01](https://make.fun/bounty/github-core-clone-01) on make.fun:
+a single-process, stdlib-only (Node 22, no dependencies, no `git` binary) forge that speaks
+git smart HTTP (protocol v2 + v0 receive-pack), GitHub REST v3, GraphQL v4 and MCP over
+streamable HTTP, all against one in-memory store. Local trial score: **980/1000**
+(feature 600 + agent 200 + perf 180) — 120/120 conformance checks, 15/15 MCP checks.
+
+Referral code: `4ha9jy2z`
 
 ## Run it
 
@@ -14,7 +20,7 @@ node --experimental-strip-types main.ts
 
 The platform runs `node /bot/main.ts` on Node 22.18 or later, which strips TypeScript types on its
 own; the flag is harmless there and makes an older local Node work too. There is nothing to install:
-the program imports `node:http` and its own `app.ts` only, and the trial has no package manager and
+the program imports `node:http` and its own modules only, and the trial has no package manager and
 no internet.
 
 ## The lifecycle (main.ts)
@@ -68,8 +74,14 @@ The trial's CPU, memory and process limits are the rules'; its wall budget is 90
 
 ## Layout
 
-- `main.ts`: the lifecycle above. Keep it as it is.
-- `app.ts`: the server. This is the file to grow.
+- `main.ts`: the lifecycle above.
+- `app.ts`: the HTTP server and router.
+- `store.ts`: the in-memory store — objects, repos, refs, issues, pull requests, labels, comments.
+- `gitcodec.ts`: pkt-line framing, sideband packets, packfile parsing and building.
+- `git.ts`: smart-HTTP handlers (info/refs, upload-pack v2/v0, receive-pack v0).
+- `rest.ts`: the REST v3 routes.
+- `graphql.ts`: a hand-rolled GraphQL tokenizer, parser and executor.
+- `mcp.ts`: the MCP endpoint (server/discover, tools/list, tools/call).
 - `package.json`, `tsconfig.json`, `LICENSE` (MIT): the entry's metadata and licence.
 
-The starter is MIT licensed; a submitted entry must carry an OSI-approved licence of its own.
+This entry is MIT licensed.
